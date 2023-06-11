@@ -6,3 +6,6 @@ https://stackoverflow.com/questions/1052148/group-by-count-function-in-sqlalchem
 
 ^related to that, used code from this link to sort station count by descending order:
 https://stackoverflow.com/questions/19694118/sqlalchemy-select-with-max-group-by-and-order-by
+
+when creating the histogram, used code from this link to put the gridlines behind the bars (zorder=-1.0):
+https://stackoverflow.com/questions/1726391/matplotlib-draw-grid-lines-behind-other-graph-elements
