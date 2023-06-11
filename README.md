@@ -1,5 +1,7 @@
 # sqlalchemy-challenge
-module 10
+## Part 1 code saved here: main branch -> analysis -> climate.ipynb
+
+## Part 2 code saved here: main branch -> analysis -> app.py
 
 used code from this link to assist with station analysis where I listed the stations and observation counts:
 https://stackoverflow.com/questions/1052148/group-by-count-function-in-sqlalchemy/4086229#4086229
