@@ -4,6 +4,7 @@ import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine
+from sqlalchemy import func
 
 from flask import Flask, jsonify
 
@@ -26,7 +27,7 @@ def Climate_Data():
         f"/api/v1.0/precipitation<br/>"
         f"/api/v1.0/stations<br/>"
         f"/api/v1.0/tobs<br/>"
-        f"/api/v1.0/start<br/>"
+        f"/api/v1.0/20140522<br/>"
         f"/api/v1.0/start/end"
     )
 
@@ -77,7 +78,23 @@ def tob():
 # - for a specified start, calculate 'TMIN','TAVG', and 'TMAX' for all the dates greater than or equal to the start date
 # - for a specified start date and end date, calculate 'TMIN', 'TAVG', and 'TMAX' for the dates from the start date to end date
 #inclusive
+@app.route("/api/v1.0/20140522")
+def start():
 
+    session = Session(engine)
+
+    #sel = [measurement.station,
+     #   func.min(measurement.tobs),
+      #  func.max(measurement.tobs),
+       # func.avg(measurement.tobs)]
+
+    results = session.query(measurement.date, func.min(measurement.tobs), func.avg(measurement.tobs), func.max(measurement.tobs)).filter(measurement.date >= '2014-05-22').all()
+
+    session.close()
+
+    start_date = list(np.ravel(results))
+
+    return jsonify(start_date)
 
 if __name__ == '__main__':
     app.run(debug=True)
