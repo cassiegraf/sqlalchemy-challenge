@@ -28,7 +28,7 @@ def Climate_Data():
         f"/api/v1.0/stations<br/>"
         f"/api/v1.0/tobs<br/>"
         f"/api/v1.0/20140522<br/>"
-        f"/api/v1.0/start/end"
+        f"/api/v1.0/startend"
     )
 
 #return last 12 months of precipitation data, include date and precipitation    
@@ -83,18 +83,24 @@ def start():
 
     session = Session(engine)
 
-    #sel = [measurement.station,
-     #   func.min(measurement.tobs),
-      #  func.max(measurement.tobs),
-       # func.avg(measurement.tobs)]
-
     results = session.query(measurement.date, func.min(measurement.tobs), func.avg(measurement.tobs), func.max(measurement.tobs)).filter(measurement.date >= '2014-05-22').all()
-
     session.close()
 
     start_date = list(np.ravel(results))
 
-    return jsonify(start_date)
+    return jsonify (start_date)
+
+@app.route("/api/v1.0/startend")
+def start_end():
+
+    session = Session(engine)
+
+    results = session.query(measurement.date, func.min(measurement.tobs), func.avg(measurement.tobs), func.max(measurement.tobs)).filter(measurement.date >= '2014-05-22').filter(measurement.date <= '2015-05-22').all()
+    session.close()
+
+    start_end = list(np.ravel(results))
+
+    return jsonify (start_end)    
 
 if __name__ == '__main__':
     app.run(debug=True)
