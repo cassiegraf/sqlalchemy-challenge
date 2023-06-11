@@ -18,38 +18,35 @@ station = Base.classes.station
 app = Flask(__name__)
 
 
-# /
-# - start at the homepage
-# - list all the available routes
-
+#starting at homepage, list all available routes
 @app.route("/")
 def Climate_Data():
     return (
         f"Available Routes:<br/>"
-        f"/api/v1.0/precipitation"
-        f"/api/v1.0/stations"
-        f"/api/vi.0/tobs"
+        f"/api/v1.0/precipitation<br/>"
+        f"/api/v1.0/stations<br/>"
+        f"/api/v1.0/tobs<br/>"
+        f"/api/v1.0/start<br/>"
+        f"/api/v1.0/start/end"
     )
 
-# /api/v1.0/precipitation
-# - convert the query results from your precipitation analysis 
-#(retrieve only the last 12 months of data) to a dictionary
-#using 'date' as the key and 'prcp' as the value
-# - return the JSON representation of your dictionary    
-@ap.route("/api/v1.0/precipitation")
+#return last 12 months of precipitation data, include date and precipitation    
+@app.route("/api/v1.0/precipitation")
 def precipitation():
     session = Session(engine)
+    results = session.query(measurement.date, measurement.prcp).filter(measurement.date >= '2016-08-23').all()
 
-    precipitation_year = []
-    for precipitation in results:
-            precipitation_dict ={}
-    ###NEED TO WORK ON THIS ^        
+    session.close()
+
+    tobs = list(np.ravel(results))
+
+    return jsonify(tobs)
+
+    ###NEED TO WORK ON THIS ^ It's not how the school is asking but the results are loading into webpage       
 
 
 
-# /api/v1.0/stations
-# - return a JSON list of stations from the dataset
-# I THINK THIS PART IS OKAY NEED TO TEST
+#return a JSON list of stations from the dataset
 @app.route("/api/v1.0/stations")
 def stations():
     session = Session(engine)
@@ -61,15 +58,11 @@ def stations():
 
     return jsonify(station_name)
 
-
-# /api/v1.0/tobs
- # - query the dates and temperature observations of the most-active 
-#station for the previous year of data
-# - return a JSON list of temperature observations for the previous 
- #year
+#query dates/temps of most-active station (USC0051928) and return JSON list of temps for previous year 
 @app.route("/api/v1.0/tobs")
+def tob():
     session = Session(engine)
-    results = session.query(measurement.date, measurement.tobs).filter(measurement.date >= '2016-8-23', measurement.station == 'USC00519281').all()
+    results = session.query(measurement.date, measurement.tobs).filter(measurement.date >= '2016-08-23', measurement.station == 'USC00519281').all()
 
     session.close()
 
@@ -84,6 +77,10 @@ def stations():
 # - for a specified start, calculate 'TMIN','TAVG', and 'TMAX' for all the dates greater than or equal to the start date
 # - for a specified start date and end date, calculate 'TMIN', 'TAVG', and 'TMAX' for the dates from the start date to end date
 #inclusive
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
     
